@@ -1,70 +1,98 @@
-# Getting Started with Create React App
+# todo tasks-:
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 1) deploy the website to render
 
-## Available Scripts
+> Goal: Render *absurd* numbers of dynamic lights in real time  
+> Status: 🚧 Experimental / WIP
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## Overview
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+> This project explores a **single-pass tiled-based deferred lighting system**
+designed to handle *extreme* light counts (10⁸–10⁹ range) using aggressive
+culling and GPU-friendly data layouts.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Key Ideas
+- [ ] Implement culling
+- [ ] Tile depth bounds
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## Constraints & Targets
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| Target | Value |
+|------|------|
+| Lights | 1,000,000,000 |
+| Passes | 1 |
+| API | Vulkan / DX12 / TBD |
+| Hardware | Modern discrete GPU |
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## High-Level Pipeline
 
-### `npm run eject`
+1. Depth pre-pass
+2. Tile generation
+3. Light frustum culling
+4. Per-tile light lists
+5. Deferred lighting evaluation (single pass)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Tiling Strategy
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- Screen divided into fixed-size tiles (e.g. 16×16)
+- Each tile maintains:
+  - Depth bounds
+  - Light index list
+- Tiles processed independently on GPU
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+**Tile size tradeoffs**
+- Smaller tiles → better culling, more overhead
+- Larger tiles → worse culling, fewer dispatches
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Light Culling
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Frustum Culling
+- Lights rejected if sphere does not intersect view frustum
 
-### Code Splitting
+### Tile Intersection
+- Light sphere vs tile frustum test
+- Append light index to tile list
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+> ⚠️ Needs atomic-safe append or prefix sum
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Data Layout
 
-### Making a Progressive Web App
+### Light Data
+```cpp
+struct Light {
+    float3 position;
+    float  radius;
+    float3 color;
+    float  intensity;
+};
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Advanced Configuration
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## 4. Markdown tricks that help *a lot*
 
-### Deployment
+### Callouts / emphasis
+```md
+> ⚠️ Important
+> 🚧 Work in progress
+> 💡 Idea
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+|L - C| < R
 
-### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
