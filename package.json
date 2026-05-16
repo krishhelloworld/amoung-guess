@@ -16,7 +16,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "node node_modules/react-scripts/bin/react-scripts.js start",
+    "start": "serve -s build -l $PORT",
     "build": "node node_modules/react-scripts/bin/react-scripts.js build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
