@@ -20,10 +20,10 @@ const THEMES = {
   },
 };
 
-export default function ChatBox({ team = "blue", title = "Team Chat" }) {
-  const t = THEMES[team] ?? THEMES.blue;
+export default function ChatBox({ team = "blue", title = "Team Chat",sender }) {
+  const t = THEMES[team] ?? THEMES.blue;//nullish coalescing operator (??) if the team is orange then the first one will work
   const [messages, setMessages] = useState([
-    { text: "Welcome to chat!", sender: "System" },
+    { text: (`Welcome to chat! ${team}`), sender: "Game" },
   ]);
   const [input, setInput] = useState("");
 
@@ -31,8 +31,8 @@ export default function ChatBox({ team = "blue", title = "Team Chat" }) {
 
 
   const sendMessage = () => {
-    const text = input.trim();
-    if (!text) return;
+   
+    if ( input.trim()==="") { setInput(""); return;}
    setMessages([...messages, { text: input, sender: "You" }]);
     setInput("");
   };
@@ -50,7 +50,7 @@ export default function ChatBox({ team = "blue", title = "Team Chat" }) {
     <div className="relative flex-1 overflow-hidden">
   <div className="absolute inset-0 overflow-y-auto pr-4 -mr-9">
     <div className="space-y-1">   {messages.map((m, i) => {
-          const mine = m.sender === "You";
+          // const mine = m.sender === "You";
           return (
             <div
               key={i}
@@ -73,6 +73,7 @@ export default function ChatBox({ team = "blue", title = "Team Chat" }) {
           placeholder="Type message…"
           value={input}
           onChange={(e) => setInput(e.target.value)}
+        
           onKeyDown={(e) => e.key === "Enter" && sendMessage()}
         />
         <button

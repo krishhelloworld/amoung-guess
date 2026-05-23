@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useReducer } from "react";
 
-// --------- Initial State ---------
 const initialState = {
   phase: "CLUE", // CLUE → VOTING → REVEAL → RESOLVE → END
   currentTeam: "Blue",

@@ -9,21 +9,28 @@ import HexagonBox from "../components/HexagonBox";
 import fightBg from "../assets/IMAGES/gs.png";
 import PlayerProfiles from "../components/PlayerProfiles";
 
+function shuffle(arr){
+  for(let i= arr.length - 1; i>0 ; i--){
+    const j = Math.floor(Math.random() * (i+1));
+    [arr[j],arr[i]]= [arr[i],arr[j]];
+  }
+  return arr;
+}
 // ----- helpers -----
 const assignTeamsToWords = () => {
-  const pool = [
+  const Words = shuffle([
     ...Array(9).fill("blue"),
     ...Array(8).fill("orange"),
-    ...Array(6).fill("neutral"),
+    ...Array(11).fill("neutral"),
     "white",
     "Jester",
-  ].sort(() => Math.random() - 0.5);
-
-  return Array.from({ length: 25 }, (_, i) => ({
+  ]);
+//9+8+6+2+5
+  return Array.from({ length: 30 }, (_, i) => ({
     id: i,
     word: `Word${i + 1}`,
     revealed: false,
-    team: pool[i],
+    team: Words[i],
     votes: [], // per-round votes (playerIds)
     resolved: false, // has this tile already had its outcome applied?
   }));
@@ -31,7 +38,9 @@ const assignTeamsToWords = () => {
 
 const opponentOf = (t) => (t === "blue" ? "orange" : "blue");
 const CapTeam = (t) => (t === "blue" ? "Blue" : "Orange");
-// place this near the top of GameScreen.js with other helper functions
+//this might be wrong need to fix it the 
+//5-> | 2 | | 1 | 1 | 1 |
+//we need the array of cards having no of  voted and then select max if cant then we draw it  
 function getMajorityThreshold(playerCount) {
   if (playerCount <= 1) return 1;        // solo / test mode
   return Math.floor(playerCount / 2) + 1; // 50% + 1 for even counts, correct for odd too
@@ -40,7 +49,7 @@ function getMajorityThreshold(playerCount) {
 export default function GameScreen() {
   // --- tester profiles (single source of truth) ---
   const [profiles, setProfiles] = useState([
-    { id: 1, name: "You", team: "blue", role: "Guesser" },
+    { id: 1, name: "Carry", team: "blue", role: "Guesser" },
     { id: 2, name: "Alex", team: "orange", role: "Guesser" },
     { id: 3, name: "Sam", team: "blue", role: "WordMaster" },
     { id: 4, name: "Lara", team: "orange", role: "WordMaster" },
@@ -523,7 +532,7 @@ resolveTileOutcome(tile.team, index);
 
             <div className="flex items-center gap-3 pt-9">
               {currentUser.role === "WordMaster" && (
-                <ClueInput onSend={onSendClue} disabled={!canGiveClue} />
+                <ClueInput team= {currentUser.team} onSend={onSendClue} disabled={!canGiveClue} />
               )}
 
               {currentUser.role === "Guesser" && (
@@ -545,7 +554,7 @@ resolveTileOutcome(tile.team, index);
         />
 
         <div className="fixed bottom-4 left-4">
-          <ChatBox team="blue" title="Blue Team Chat" />
+          <ChatBox sender={currentUser} team="blue" title="Blue Team Chat" />
         </div>
 
         <div className="fixed bottom-4 right-4">
