@@ -183,7 +183,7 @@ const handleVote = (index, playerId) => {
   setWords((prev) => {
     // compute usedByPlayer BEFORE modifying tiles
    const usedByPlayer = prev.reduce((acc, word) => {
-  // 🔧 Do not count votes on revealed tiles (past rounds / already resolved)
+  //do not count votes on revealed tiles (past rounds / already resolved)
   if (word.revealed) return acc;
   return acc + ((word.votes || []).includes(playerId) ? 1 : 0);
 }, 0);
@@ -524,7 +524,7 @@ resolveTileOutcome(tile.team, index);
   disabled={!canClickBoard}
   revealAll={currentUser.role === "WordMaster"}
   isGuesser={currentUser.role === "Guesser"}
-  currentUserRole={currentUser.role}   // 👈 add this
+  currentUserRole={currentUser.role}   
 />
 
 
@@ -552,23 +552,26 @@ resolveTileOutcome(tile.team, index);
           currentUser={currentUser}
           setCurrentUser={setCurrentUser}
         />
-
         <div className="fixed bottom-4 left-4">
-          <ChatBox sender={currentUser} team="blue" title="Blue Team Chat" />
-        </div>
-
-        <div className="fixed bottom-4 right-4">
-          <div className="mt-4 flex items-center gap-6">
+                    <div className="mt-4 flex items-center gap-6">
             <div className="text-center">
               <div className="text-sm text-white/70 mb-1">Blue Score</div>
               <HexagonBox>{blueScore}</HexagonBox>
             </div>
-            <div className="text-center">
-              <div className="text-sm text-white/70 mb-1">Orange Score</div>
-              <HexagonBox>{orangeScore}</HexagonBox>
-            </div>
+           
           </div>
-          <ChatBox team="orange" title="Orange Team Chat" />
+          <ChatBox senders={currentUser.name}  team="blue" title="Blue Team Chat" disabled={currentUser.team !== "blue" || currentUser.role === "WordMaster"} />
+        </div>
+
+        <div className="fixed bottom-4 right-4">
+          <div className="mt-4 flex justify-end items-center">
+  <div className="text-center">
+    <div className="text-sm text-white/70 mb-1">Orange Score</div>
+    <HexagonBox>{orangeScore}</HexagonBox>
+  </div>
+</div>
+
+          <ChatBox senders={currentUser.name} team="orange" title="Orange Team Chat" disabled={ currentUser.team !== "orange" || currentUser.role === "WordMaster"} />
         </div>
       </div>
     </div>

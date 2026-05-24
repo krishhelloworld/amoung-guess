@@ -20,20 +20,19 @@ const THEMES = {
   },
 };
 
-export default function ChatBox({ team = "blue", title = "Team Chat",sender }) {
+export default function ChatBox({ team = "blue", title = "Team Chat", senders ,disabled}) {
   const t = THEMES[team] ?? THEMES.blue;//nullish coalescing operator (??) if the team is orange then the first one will work
   const [messages, setMessages] = useState([
     { text: (`Welcome to chat! ${team}`), sender: "Game" },
   ]);
   const [input, setInput] = useState("");
 
- const messagesEndRef = useRef(null);
+const messagesEndRef = useRef(null);
 
-
-  const sendMessage = () => {
+const sendMessage = () => {
    
     if ( input.trim()==="") { setInput(""); return;}
-   setMessages([...messages, { text: input, sender: "You" }]);
+   setMessages([...messages, { text: input, sender: senders }]);
     setInput("");
   };
    // Auto scroll when messages change
@@ -67,13 +66,13 @@ export default function ChatBox({ team = "blue", title = "Team Chat",sender }) {
         </div>
       </div>
 
-      <div className="mt-2 flex gap-2">
+      <div className={disabled ? "hidden":"mt-2 flex gap-2"} >
         <input
           className={`flex-1 px-3 py-2 rounded-lg outline-none text-white placeholder-white/60 ${t.inputBg}`}
           placeholder="Type message…"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-        
+      
           onKeyDown={(e) => e.key === "Enter" && sendMessage()}
         />
         <button
