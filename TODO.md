@@ -1,17 +1,38 @@
+
 # todo tasks-:
 
 ## 2)fix chatbot -;
-- Only thier respective team members can chat in thier respective chatbox
+<!-- - Only thier respective team members can chat in thier respective chatbox -->
+<!-- - Word master cant type also should be add in the code -->
 - identity theft is only allowed to access the orange chat only while it is using its power
 
-
-## 3) after changing profile -;
-- chat name refersh 
+## 3) input Clue
+- on enter it will auto send the clue 
+- limit the words of input for wordmaster make only three two words max 
+- or the user in the setting can also edit the wordmaster input limit 
 
 ## 4) Adding dislike and like button on clue given by wordmaster 
 ---
 
-##  Game Logic & State Management 
+
+## 5)Voting logic 
+
+
+
+## 6)Cards behaviour 
+- jester cards end the game and jester will win
+- black cards can win the next teams
+- thier team cards +1
+- ohter teams cards other team scores +1 and your chances end 
+- 
+
+
+## fix Phase Headers Titles 
+
+
+
+##  Game Logic & State Management-;
+
 - o Implement game rules and logic on frontend (basic): 
 - o Manage turn phases (clue, guess, reveal) 
 - o Track which words are revealed or guessed 
@@ -22,12 +43,14 @@
 
 ## ROLES-; [ this to feel the one person game to everyone ,such that they can have thier opinions ]
 
-1)jester
-2)swapper     //every team have this 
-3)role guesser  //1 per game //either guess the jester in own team or guess roles of other teams
-4)identity stealer -> highlight a word ,can chat in opponent chats  //1 per game 
-)blaze caller -> ignite a word of previous match which are not voted correctly(doesnt work if minority words are more two) than such that first person vote on it is instantly kicked out [if a person swap on it also then also then it will not affect anything]//but it can affect if the opponenet wordmaster has to give words which is his words and blaze caller ignite it already
-5)double voter // every team has majority towards it
+- 1)jester
+- 2)swapper     //every team have this 
+- 3)role guesser  //1 per game //either guess the jester in own team or guess roles of other teams
+- 4)identity stealer -> highlight a word ,can chat in opponent chats  //1 per game 
+- )blaze caller -> ignite a word of previous match which are not voted correctly(doesnt work if minority words are more two) than such that first person vote on it is instantly kicked out [if a person swap on it also then also then it will not affect anything]//but it can affect if the opponenet wordmaster has to give words which is his words and blaze caller ignite it already
+- 5)double voter // every team has majority towards it
+
+
 ---
 
 
@@ -45,7 +68,9 @@
 ### o Implement **game rules** and logic on frontend (basic):
 
 
-
+# learn this -
+- whole code of gamescreen.js and learn what to use where 
+- createContext, useContext, useReducer learn about this
 
 
 ## Constraints & Targets
@@ -106,6 +131,3 @@ struct Light {
 
 
 ---
-
-
-
