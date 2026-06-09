@@ -1,14 +1,19 @@
 
 # todo tasks-:
 
+## 1) Timeout Logic-;
+- chance change on TimeOut  
+
 ## 2)fix chatbot -;
 <!-- - Only thier respective team members can chat in thier respective chatbox -->
 <!-- - Word master cant type also should be add in the code -->
+- Whenever the wordmaster will give the word the word will be show in chat
 - identity theft is only allowed to access the orange chat only while it is using its power
 
 ## 3) input Clue
+<!-- 
 - on enter it will auto send the clue 
-- limit the words of input for wordmaster make only three two words max 
+- limit the words of input for wordmaster make only three two words max  -->
 - or the user in the setting can also edit the wordmaster input limit 
 
 ## 4) Adding dislike and like button on clue given by wordmaster 

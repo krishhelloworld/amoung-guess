@@ -38,6 +38,9 @@ const assignTeamsToWords = () => {
 
 const opponentOf = (t) => (t === "blue" ? "orange" : "blue");
 const CapTeam = (t) => (t === "blue" ? "Blue" : "Orange");
+
+
+
 //this might be wrong need to fix it the 
 //5-> | 2 | | 1 | 1 | 1 |
 //we need the array of cards having no of  voted and then select max if cant then we draw it  
@@ -61,22 +64,25 @@ const [trapWords, setTrapWords] = useState(() => {
   profiles.forEach(p => {
     if (p.role === "Jester") {
       const unrevealed = Array.from({ length: 25 }, (_, i) => i);
-      const randomIndex = unrevealed[Math.floor(Math.random() * unrevealed.length)];
-      obj[p.id] = randomIndex; // store by Jester’s playerId
+      const randomJesterIndex = unrevealed[Math.floor(Math.random() * unrevealed.length)];
+      obj[p.id] =randomJesterIndex ; // store by Jester’s playerId
     }
   });
-  return obj; // {playerId: wordIndex}
+  return obj; // {playerId: wordIndex} why not directly index why to create obj
 });
 
+//this is not perfect to having first user have the current user this will change after server.js in real user
   const [currentUser, setCurrentUser] = useState(profiles[0]);
+// ----------------------------------------------------------------------------------------------------------------------
   const [trapWord, setTrapWord] = useState(null);
+
 
   // --- board + game state ---
   const [words, setWords] = useState(assignTeamsToWords);
   const [phase, setPhase] = useState("Clue Phase");
   const [currentTeam, setCurrentTeam] = useState("blue");
-  const [blueScore, setBlueScore] = useState(9);
-  const [orangeScore, setOrangeScore] = useState(8);
+  const [blueScore, setBlueScore] = useState(8);
+  const [orangeScore, setOrangeScore] = useState(7);
 
   // clue: (count == votes per player)
   const [clue, setClue] = useState({ word: "", count: 0 });
@@ -92,6 +98,7 @@ const resolutionLockRef = useRef(false);
   // --- derived flags ---
   const gameOver = phase.includes("Wins");
 
+// -- Some bools values to check players eligiblity inside functional arguements -----
   const canGiveClue = useMemo(
     () =>
       phase === "Clue Phase" &&
@@ -131,11 +138,13 @@ const resolutionLockRef = useRef(false);
       }
     }, 1000);
     return () => clearInterval(id);
-  }, [phase, currentTeam, gameOver]);
+  }, [phase, currentTeam, gameOver]);     
 
-  // ----- WordMaster sends clue -----
- // ----- WordMaster sends clue -----
-const onSendClue = ({ clue: clueWord, count }) => {
+// ----------------------------------------------------------------------------------------------------------------------
+                  // ----- WordMaster sends clue -----
+// ----------------------------------------------------------------------------------------------------------------------
+
+ const onSendClue = ({ clue: clueWord, count }) => {
   if (!canGiveClue) return;
 
   const normalized = {
@@ -161,8 +170,10 @@ const onSendClue = ({ clue: clueWord, count }) => {
 
 
 
+// ----------------------------------------------------------------------------------------------------------------------
+            // ----- guesser voting -----
+// ----------------------------------------------------------------------------------------------------------------------
 
-  // ----- guesser voting -----
 const handleVote = (index, playerId) => {
   // block while a resolution is in-flight
   if (resolutionLockRef.current) return;
@@ -248,15 +259,16 @@ if (revealNow && revealTeam !== null && revealIndex !== null) {
   }, 0);
 };
 
+// -----------------------------------------------------------------------------------------------------------------------
+          // ----- central resolver for revealed outcome -----
+// ----------------------------------------------------------------------------------------------------------------------
 
-
-  // ----- central resolver for revealed outcome -----
 const resolveTileOutcome = (index, clickedTeam) => {
   const opp = opponentOf(currentTeam);
 
-  // 🎭 Check all Jesters
+  // Check all Jesters
   Object.entries(trapWords).forEach(([pid, trapIndex]) => {
-    const jester = profiles.find(p => p.id === Number(pid));
+    const jester = profiles.find(p => p.id === Number(pid));//this 
     if (!jester) return;
 
     if (trapIndex === index) {
@@ -376,8 +388,11 @@ const resolveTileOutcome = (index, clickedTeam) => {
 };
 
 
+// ----------------------------------------------------------------------------------------------------------------------
+      // ----- WordMaster direct reveal (for testing) -----
+// ----------------------------------------------------------------------------------------------------------------------
 
-  // ----- WordMaster direct reveal (for testing) -----
+
 const handleWordClick = (index) => {
   if (currentUser.role !== "WordMaster") return;
   const tile = words[index];
@@ -400,8 +415,13 @@ resolveTileOutcome(tile.team, index);
   };
 
   const onEndTurn = onConfirmGuess;
-  
-  // ----- Dev tester (unchanged, just helpful) -----
+
+
+// ----------------------------------------------------------------------------------------------------------------------
+      // ----- Dev tester (unchanged, just helpful) -----
+// ----------------------------------------------------------------------------------------------------------------------
+
+
   const [testerOpen, setTesterOpen] = useState(false);
   const roleOptions = ["WordMaster", "Guesser", "Jester", "EvilGuesser"];
 

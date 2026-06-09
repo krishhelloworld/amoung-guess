@@ -1,119 +1,119 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Login - Booogle</title>
-  <link rel="stylesheet" href="/css/login.css">
-  <script src="/js/runtime-config.js"></script>
-</head>
-<body>
-  <section>
-        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    <div class="container">
-      <input type="checkbox" id="flip">
-      <div class="cover">
-        <div class="front" style="background-image: url('https://wallpapers.com/images/hd/purple-gradient-background-2560-x-1280-bw47mvabspav8twy.jpg');">
-          <img src="https://wallpapers.com/images/hd/purple-gradient-background-2560-x-1280-bw47mvabspav8twy.jpg" alt="">
-          <div class="text">
-            <div class="text-1">Track your PDF reading progress<br>with Booogle</div>
-            <div class="text-2">Let's get started with your study journey</div>
-          </div>
-        </div>
-        <div class="back">
-          <div class="text">
-            <div class="text-1">Boost your learning<br>with BOOOGLE</div><br><br>
-            <div class="text-1">Save your progress<br>across all devices</div>
-            <div class="text-2">Let's get connected</div>
-          </div>
-        </div>
-      </div>
+// <!DOCTYPE html>
+// <html lang="en">
+// <head>
+//   <meta charset="UTF-8">
+//   <title>Login - Booogle</title>
+//   <link rel="stylesheet" href="/css/login.css">
+//   <script src="/js/runtime-config.js"></script>
+// </head>
+// <body>
+//   <section>
+//         <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+//     <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+//     <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+//     <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+//     <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+//     <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+//     <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+//     <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+//     <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+//     <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+//     <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+//     <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+//     <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+//     <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+//     <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+//     <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+//     <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+//     <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+//     <div class="container">
+//       <input type="checkbox" id="flip">
+//       <div class="cover">
+//         <div class="front" style="background-image: url('https://wallpapers.com/images/hd/purple-gradient-background-2560-x-1280-bw47mvabspav8twy.jpg');">
+//           <img src="https://wallpapers.com/images/hd/purple-gradient-background-2560-x-1280-bw47mvabspav8twy.jpg" alt="">
+//           <div class="text">
+//             <div class="text-1">Track your PDF reading progress<br>with Booogle</div>
+//             <div class="text-2">Let's get started with your study journey</div>
+//           </div>
+//         </div>
+//         <div class="back">
+//           <div class="text">
+//             <div class="text-1">Boost your learning<br>with BOOOGLE</div><br><br>
+//             <div class="text-1">Save your progress<br>across all devices</div>
+//             <div class="text-2">Let's get connected</div>
+//           </div>
+//         </div>
+//       </div>
 
-      <div class="forms">
-        <div class="form-content">
-          <!-- LOGIN FORM -->
-          <div class="login-form">
-            <div class="title">Login</div>
-            <form id="loginForm">
-              <div class="input-boxes">
-                <div class="input-box">
-                  <i class="fas fa-envelope"></i>
-                  <input type="email" id="loginEmail" placeholder="Enter your email" required>
-                </div>
-                <div class="input-box">
-                  <i class="fas fa-lock"></i>
-                  <input type="password" id="loginPassword" placeholder="Enter your password" required>
-                </div>
-                <div class="text" style="color: #0f0;"><a href="#">Forgot password?</a></div>
-                <div id="loginError" style="color: #ff4444; font-size: 14px; margin: 10px 0; display: none;"></div>
-                <div class="button input-box">
-                  <input type="submit" value="Login">
-                </div>
-                <div class="text sign-up-text">Don't have an account? <label for="flip">Signup now</label></div>
-              </div>
-            </form>
-          </div>
+//       <div class="forms">
+//         <div class="form-content">
+//           <!-- LOGIN FORM -->
+//           <div class="login-form">
+//             <div class="title">Login</div>
+//             <form id="loginForm">
+//               <div class="input-boxes">
+//                 <div class="input-box">
+//                   <i class="fas fa-envelope"></i>
+//                   <input type="email" id="loginEmail" placeholder="Enter your email" required>
+//                 </div>
+//                 <div class="input-box">
+//                   <i class="fas fa-lock"></i>
+//                   <input type="password" id="loginPassword" placeholder="Enter your password" required>
+//                 </div>
+//                 <div class="text" style="color: #0f0;"><a href="#">Forgot password?</a></div>
+//                 <div id="loginError" style="color: #ff4444; font-size: 14px; margin: 10px 0; display: none;"></div>
+//                 <div class="button input-box">
+//                   <input type="submit" value="Login">
+//                 </div>
+//                 <div class="text sign-up-text">Don't have an account? <label for="flip">Signup now</label></div>
+//               </div>
+//             </form>
+//           </div>
 
-          <!-- SIGNUP FORM -->
-          <div class="signup-form">
-            <div class="title">Signup</div>
-            <form id="signupForm">
-              <div class="input-boxes">
-                <div class="input-box">
-                  <i class="fas fa-user"></i>
-                  <input type="text" id="signupUsername" placeholder="Enter username" required>
-                </div>
-                <div class="input-box">
-                  <i class="fas fa-envelope"></i>
-                  <input type="email" id="signupEmail" placeholder="Enter your email" required>
-                </div>
-                <div class="input-box">
-                  <i class="fas fa-lock"></i>
-                  <input type="password" id="signupPassword" placeholder="Enter your password (min 6 chars)" required minlength="6">
-                </div>
-                <div id="signupError" style="color: #ff4444; font-size: 14px; margin: 10px 0; display: none;"></div>
-                <div class="button input-box">
-                  <input type="submit" value="Signup">
-                </div>
-                <div class="text sign-up-text">Already have an account? <label for="flip">Login now</label></div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+//           <!-- SIGNUP FORM -->
+//           <div class="signup-form">
+//             <div class="title">Signup</div>
+//             <form id="signupForm">
+//               <div class="input-boxes">
+//                 <div class="input-box">
+//                   <i class="fas fa-user"></i>
+//                   <input type="text" id="signupUsername" placeholder="Enter username" required>
+//                 </div>
+//                 <div class="input-box">
+//                   <i class="fas fa-envelope"></i>
+//                   <input type="email" id="signupEmail" placeholder="Enter your email" required>
+//                 </div>
+//                 <div class="input-box">
+//                   <i class="fas fa-lock"></i>
+//                   <input type="password" id="signupPassword" placeholder="Enter your password (min 6 chars)" required minlength="6">
+//                 </div>
+//                 <div id="signupError" style="color: #ff4444; font-size: 14px; margin: 10px 0; display: none;"></div>
+//                 <div class="button input-box">
+//                   <input type="submit" value="Signup">
+//                 </div>
+//                 <div class="text sign-up-text">Already have an account? <label for="flip">Login now</label></div>
+//               </div>
+//             </form>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   </section>
 
-  <!-- API Diagnostics (helps debug Netlify / 404 issues) -->
-  <div style="max-width:900px;margin: 1rem auto; padding: 1rem; border-radius:8px; background: #fff; box-shadow: 0 6px 18px rgba(0,0,0,0.06); font-family: system-ui, -apple-system, 'Segoe UI', Roboto;">
-    <h3 style="margin:0 0 0.75rem 0; font-size:16px;">🔧 API diagnostics</h3>
-    <div style="font-size:13px; color:#333; margin-bottom:0.5rem">This shows what the page thinks your backend API URL is and lets you test connectivity. If the test returns Netlify's "Page not found" HTML, your site is calling a path that Netlify is serving instead of your backend.</div>
-    <div style="display:flex; gap:0.5rem; align-items:center; margin-bottom:0.5rem;">
-      <div style="font-size:13px; color:#666;">API URL:</div>
-      <code id="diagnosticApiUrl" style="background:#f5f5f5; padding:6px 8px; border-radius:6px; font-size:13px;">-</code>
-      <button id="testApiBtn" style="margin-left:auto; padding:6px 10px; border-radius:6px; border:none; background:#2563eb; color:white; cursor:pointer;">Test API</button>
-    </div>
-    <div id="diagnosticResult" style="font-family:monospace; font-size:12px; white-space:pre-wrap; color:#222; background:#111; color:#fff; padding:8px; border-radius:6px; min-height:48px; display:block">No test run yet.</div>
-    <div style="font-size:12px; color:#666; margin-top:0.5rem">If the result contains HTML with "Page not found" or other Netlify text, set your API host with a <code>&lt;meta name="api-base" content="https://api.example.com"&gt;</code> in your HTML or configure Netlify to proxy <code>/api/*</code> to your backend.</div>
-  </div>
+//   <!-- API Diagnostics (helps debug Netlify / 404 issues) -->
+//   <div style="max-width:900px;margin: 1rem auto; padding: 1rem; border-radius:8px; background: #fff; box-shadow: 0 6px 18px rgba(0,0,0,0.06); font-family: system-ui, -apple-system, 'Segoe UI', Roboto;">
+//     <h3 style="margin:0 0 0.75rem 0; font-size:16px;">🔧 API diagnostics</h3>
+//     <div style="font-size:13px; color:#333; margin-bottom:0.5rem">This shows what the page thinks your backend API URL is and lets you test connectivity. If the test returns Netlify's "Page not found" HTML, your site is calling a path that Netlify is serving instead of your backend.</div>
+//     <div style="display:flex; gap:0.5rem; align-items:center; margin-bottom:0.5rem;">
+//       <div style="font-size:13px; color:#666;">API URL:</div>
+//       <code id="diagnosticApiUrl" style="background:#f5f5f5; padding:6px 8px; border-radius:6px; font-size:13px;">-</code>
+//       <button id="testApiBtn" style="margin-left:auto; padding:6px 10px; border-radius:6px; border:none; background:#2563eb; color:white; cursor:pointer;">Test API</button>
+//     </div>
+//     <div id="diagnosticResult" style="font-family:monospace; font-size:12px; white-space:pre-wrap; color:#222; background:#111; color:#fff; padding:8px; border-radius:6px; min-height:48px; display:block">No test run yet.</div>
+//     <div style="font-size:12px; color:#666; margin-top:0.5rem">If the result contains HTML with "Page not found" or other Netlify text, set your API host with a <code>&lt;meta name="api-base" content="https://api.example.com"&gt;</code> in your HTML or configure Netlify to proxy <code>/api/*</code> to your backend.</div>
+// //   </div>
 
-  <script>
+//   <script>
     const API_URL = window.API_URL || (window.location.origin + '/api');
 
     // LOGIN FORM
@@ -253,6 +253,6 @@
     if (localStorage.getItem('token')) {
       window.location.href = '/html/ham.html';
     }
-  </script>
-</body>
-</html>
+//   </script>
+// </body>
+// </html>
