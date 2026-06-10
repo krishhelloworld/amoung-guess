@@ -36,7 +36,7 @@ function WordBoard({
   };
 
   if (!Array.isArray(words) || words.length === 0) {
-    return <div className="text-white text-center">Loading words...</div>;
+    return <div className="text-white text-center">Fucking Loading words...</div>;
   }
 
   return (
@@ -54,7 +54,7 @@ const revealed = revealAll || !!wordObj.revealed || seesJesterVision;
           wordObj.votes.includes(currentUserId);
 
 
- // 👈 Jester sees assassin
+ // Jester sees assassin
         return (
           <div
             key={index}
@@ -68,6 +68,7 @@ const revealed = revealAll || !!wordObj.revealed || seesJesterVision;
                 onWordClick(index);
               }
             }}
+//i dont know why the fuck i disabled this change it afterward 
             className={`relative rounded-lg overflow-hidden transform transition-all duration-300 ease-in-out ${
               disabled ? "opacity-80 cursor-not-allowed" : "cursor-pointer hover:scale-105 hover:shadow-xl"
             }`}
