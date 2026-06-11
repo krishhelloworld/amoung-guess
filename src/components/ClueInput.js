@@ -17,7 +17,6 @@ export default function ClueInput({ team = "blue",onSend, disabled }) {
   const t = THEMES[team] ?? THEMES.blue;
   const EnterRef = useRef(null);
   const AutoWriteRef= useRef(null);
-  const RangeRef= useRef(null);
   const [clueWord, setClueWord] = useState({
   blue:{word: "", count: 1},
   orange:{word: "", count: 1}  
@@ -93,7 +92,6 @@ const handleEnter = (e) =>{
 
 }      
       <input
-      ref = {RangeRef}
         type="range"
         min={1}
         max={9}

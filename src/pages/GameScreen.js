@@ -8,7 +8,12 @@ import ChatBox from "../components/ChatBox";
 import HexagonBox from "../components/HexagonBox";
 import fightBg from "../assets/IMAGES/gs.png";
 import PlayerProfiles from "../components/PlayerProfiles";
+import nlp from  "compromise";
+import {generate} from "random-words";
 
+
+
+//============= USEABLE FUNCTIONS IN LOGICS ===============
 function shuffle(arr){
   for(let i= arr.length - 1; i>0 ; i--){
     const j = Math.floor(Math.random() * (i+1));
@@ -16,25 +21,10 @@ function shuffle(arr){
   }
   return arr;
 }
+ function isNoun(word) {
+    return nlp(word).nouns().out("array").length > 0;
+  }
 // ----- helpers -----
-const assignTeamsToWords = () => {
-  const Words = shuffle([
-    ...Array(9).fill("blue"),
-    ...Array(8).fill("orange"),
-    ...Array(11).fill("neutral"),
-    "white",
-    "Jester",
-  ]);
-//9+8+6+2+5
-  return Array.from({ length: 30 }, (_, i) => ({
-    id: i,
-    word: `Word${i + 1}`,
-    revealed: false,
-    team: Words[i],
-    votes: [], // per-round votes (playerIds)
-    resolved: false, // has this tile already had its outcome applied?
-  }));
-};
 
 const opponentOf = (t) => (t === "blue" ? "orange" : "blue");
 const CapTeam = (t) => (t === "blue" ? "Blue" : "Orange");
@@ -58,17 +48,37 @@ export default function GameScreen() {
     { id: 4, name: "Lara", team: "orange", role: "WordMaster" },
     { id: 5, name: "Jordan", team: "blue", role: "Jester" }
   ]);
+
+  const assignTeamsToWords = () => {
+const nouns =  generate(100).filter(isNoun);
+    const Words = shuffle([
+      ...Array(9).fill("blue"),
+      ...Array(8).fill("orange"),
+      ...Array(11).fill("neutral"),
+      "white",
+      "Jester",
+    ]);
+  //9+8+6+2+5
+    return Array.from({ length: 30 }, (_, i) => ({
+      id: i,
+      word:nouns[i],
+      revealed: false,
+      team: Words[i],
+      votes: [], // per-round votes (playerIds)
+      resolved: false, // has this tile already had its outcome applied?
+    }));
+  };
   // After profiles state
-const [trapWords, setTrapWords] = useState(() => {
-  const obj = {};
-  profiles.forEach(p => {
-    if (p.role === "Jester") {
-      const unrevealed = Array.from({ length: 25 }, (_, i) => i);
-      const randomJesterIndex = unrevealed[Math.floor(Math.random() * unrevealed.length)];
-      obj[p.id] =randomJesterIndex ; // store by Jester’s playerId
-    }
-  });
-  return obj; // {playerId: wordIndex} why not directly index why to create obj
+  const [trapWords, setTrapWords] = useState(() => {
+    const obj = {};
+    profiles.forEach(p => {
+      if (p.role === "Jester") {
+        const unrevealed = Array.from({ length: 25 }, (_, i) => i);
+        const randomJesterIndex = unrevealed[Math.floor(Math.random() * unrevealed.length)];
+        obj[p.id] =randomJesterIndex ; // store by Jester’s playerId
+      }
+    });
+    return obj; // {playerId: wordIndex} why not directly index why to create obj
 });
 
 //this is not perfect to having first user have the current user this will change after server.js in real user
@@ -98,6 +108,8 @@ const resolutionLockRef = useRef(false);
   // --- derived flags ---
   const gameOver = phase.includes("Wins");
 
+
+///======================functions 
 // -- Some bools values to check players eligiblity inside functional arguements -----
   const canGiveClue = useMemo(
     () =>

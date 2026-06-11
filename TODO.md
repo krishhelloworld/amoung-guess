@@ -4,6 +4,7 @@
 ## 1) Timeout Logic-;
 - chance change on TimeOut  
 ## on reveal the word will be removed
+## increase the blur value on 
 ## 2)fix chatbot -;
 <!-- - Only thier respective team members can chat in thier respective chatbox -->
 <!-- - Word master cant type also should be add in the code -->
