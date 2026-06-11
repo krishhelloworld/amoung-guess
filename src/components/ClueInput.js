@@ -17,6 +17,7 @@ export default function ClueInput({ team = "blue",onSend, disabled }) {
   const t = THEMES[team] ?? THEMES.blue;
   const EnterRef = useRef(null);
   const AutoWriteRef= useRef(null);
+  const RangeRef= useRef(null);
   const [clueWord, setClueWord] = useState({
   blue:{word: "", count: 1},
   orange:{word: "", count: 1}  
@@ -27,9 +28,31 @@ if(/^[a-zA-Z]$/.test(e.key)){
 AutoWriteRef.current?.focus();
 }
 }
+const GoToRange =  (e)=>{
+if(((e.ctrlKey)||(e.metaKey) )&& (e.key)==="ArrowRight"){
+  setClueWord((prev)=>({
+...prev,
+[team]:{
+  ...prev[team],
+  count : Math.min(prev[team].count+1,9)
+  }
+}));
+}
+if(((e.ctrlKey)||(e.metaKey) )&& (e.key)==="ArrowLeft"){
+  setClueWord((prev)=>({
+...prev,
+[team]:{
+  ...prev[team],
+  count : Math.max(prev[team].count-1,0)
+  }
+}));
+} 
+}
 window.addEventListener("keydown",GotoInput);
+window.addEventListener("keydown",GoToRange);
 return()=>{
   window.removeEventListener("keydown",GotoInput);
+  window.removeEventListener("keydown",GoToRange);
 };
 
 }); 
@@ -70,6 +93,7 @@ const handleEnter = (e) =>{
 
 }      
       <input
+      ref = {RangeRef}
         type="range"
         min={1}
         max={9}
