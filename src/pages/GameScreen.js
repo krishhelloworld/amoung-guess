@@ -50,7 +50,7 @@ export default function GameScreen() {
   ]);
 
   const assignTeamsToWords = () => {
-const nouns =  generate(100).filter(isNoun);
+const nouns =  generate(30);
     const Words = shuffle([
       ...Array(9).fill("blue"),
       ...Array(8).fill("orange"),
@@ -99,15 +99,15 @@ const nouns =  generate(100).filter(isNoun);
   const [guessRemaining, setGuessRemaining] = useState(0);
 
   // timers
-  const [blueTime, setBlueTime] = useState(90);
-  const [orangeTime, setOrangeTime] = useState(90);
+  const [blueTime, setBlueTime] = useState(30);
+  const [orangeTime, setOrangeTime] = useState(30);
 
   // guard to avoid double draw-processing per clue
   const drawHandledRef = useRef(false);
 const resolutionLockRef = useRef(false);
   // --- derived flags ---
   const gameOver = phase.includes("Wins");
-
+const [reveal, setReveal]= useState(gameOver);
 
 ///======================functions 
 // -- Some bools values to check players eligiblity inside functional arguements -----
@@ -149,8 +149,16 @@ const resolutionLockRef = useRef(false);
         setOrangeTime((t) => Math.max(0, t - 1));
       }
     }, 1000);
+    if(blueTime ===0 ||  orangeTime === 0 ) {
+    setPhase(`${opponentOf(currentTeam)} Wins!`);
+      setGuessRemaining(0);
+      setReveal(true);
+      resolutionLockRef.current = false;
+
+      return;
+    }
     return () => clearInterval(id);
-  }, [phase, currentTeam, gameOver]);     
+  }, [phase, currentTeam, gameOver,blueTime,orangeTime]);     
 
 // ----------------------------------------------------------------------------------------------------------------------
                   // ----- WordMaster sends clue -----
@@ -167,7 +175,12 @@ const resolutionLockRef = useRef(false);
   setClue(normalized);
   setPhase("Guess Phase");
   setGuessRemaining(normalized.count);
-
+  if(currentTeam === "blue"){
+    setBlueTime(30);
+  }
+  else{
+  setOrangeTime(30)
+  }
   // 🔧 Clear per-round votes on ALL tiles (revealed or not).
   //    This prevents old profiles from being mistakenly "at cap".
   setWords(prev => prev.map(w => ({ ...w, votes: [] })));
@@ -336,12 +349,14 @@ const resolveTileOutcome = (index, clickedTeam) => {
     // Correct team found
     if (clickedTeam === currentTeam) {
       if (currentTeam === "blue") {
+        setBlueTime(30);
         setBlueScore((s) => {
           const next = s - 1;
           if (next <= 0) setPhase("Blue Wins!");
           return next;
         });
       } else {
+        setOrangeTime(30);
         setOrangeScore((s) => {
           const next = s - 1;
           if (next <= 0) setPhase("Orange Wins!");
@@ -366,12 +381,14 @@ const resolveTileOutcome = (index, clickedTeam) => {
     // Opponent tile -> help them, subtract their remaining word and end turn
     if (clickedTeam === opp) {
       if (clickedTeam === "blue") {
+        setBlueTime(30);
         setBlueScore((s) => {
           const next = s - 1;
           if (next <= 0) setPhase("Blue Wins!");
           return next;
         });
       } else {
+        setOrangeTime(30);
         setOrangeScore((s) => {
           const next = s - 1;
           if (next <= 0) setPhase("Orange Wins!");
@@ -444,84 +461,6 @@ resolveTileOutcome(tile.team, index);
       ? `${CapTeam(currentTeam)} Clue Phase`
       : phase;
 
-  const DevRoleTester = () => (
-    <div className="fixed top-4 right-4 z-60">
-      <div className="flex items-center gap-2">
-        <button
-          onClick={() => setTesterOpen((s) => !s)}
-          className="bg-black/70 text-white px-3 py-1 rounded-md border border-gray-700 text-sm shadow"
-        >
-          {testerOpen ? "Close Tester" : "Tester"}
-        </button>
-      </div>
-
-      {testerOpen && (
-        <div className="mt-2 w-64 bg-black/80 backdrop-blur border border-gray-700 rounded-lg px-3 py-3 shadow-lg text-xs text-white">
-          <div className="mb-2 text-sm font-medium">Dev Role Panel</div>
-
-          <label className="block text-[11px] mb-1 text-gray-300">Role</label>
-          <select
-            value={currentUser.role}
-            onChange={(e) =>
-              setCurrentUser((u) => ({ ...u, role: e.target.value }))
-            }
-            className="w-full mb-2 bg-gray-900 border border-gray-700 rounded px-2 py-1 text-lg"
-          >
-            {roleOptions.map((r) => (
-              <option key={r} value={r}>
-                {r}
-              </option>
-            ))}
-          </select>
-
-          <label className="block text-[11px] mb-1 text-gray-300">Team</label>
-          <select
-            value={currentUser.team}
-            onChange={(e) =>
-              setCurrentUser((u) => ({ ...u, team: e.target.value }))
-            }
-            className="w-full mb-2 bg-gray-900 border border-gray-700 rounded px-2 py-1 text-sm"
-          >
-            <option value="blue">blue</option>
-            <option value="orange">orange</option>
-          </select>
-
-          <div className="flex items-center gap-2 mt-1">
-            <button
-              onClick={() =>
-                setCurrentTeam((t) => (t === "blue" ? "orange" : "blue"))
-              }
-              className="flex-1 bg-gray-800 border border-gray-700 px-2 py-1 rounded text-xs"
-            >
-              Switch Turn → {currentTeam}
-            </button>
-            <button
-              onClick={() => {
-                setWords(assignTeamsToWords());
-                setBlueScore(9);
-                setOrangeScore(8);
-                setPhase("Clue Phase");
-                setCurrentTeam("blue");
-                setClue({ word: "", count: 0 });
-                setGuessRemaining(0);
-                drawHandledRef.current = false;
-              }}
-              className="bg-red-700 px-2 py-1 rounded text-xs"
-            >
-              Reset
-            </button>
-          </div>
-
-          <div className="mt-3 text-[12px] text-gray-300">
-            <div>Role: <b className="text-white">{currentUser.role}</b></div>
-            <div>Team: <b className="text-white">{currentUser.team}</b></div>
-            <div>Phase: <b className="text-white">{phase}</b></div>
-            <div>Guess Remaining: <b className="text-white">{guessRemaining}</b></div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
 
   return (
     <div
@@ -544,7 +483,7 @@ resolveTileOutcome(tile.team, index);
             activeTeam={currentTeam}
           />
 
-          <DevRoleTester />
+          {/* <DevRoleTester /> */}
 
           <div className="flex flex-col items-center">
             <div className="bg-white bg-opacity-10 rounded-xl p-4 shadow-lg">
@@ -554,7 +493,7 @@ resolveTileOutcome(tile.team, index);
   onVote={handleVote}
   currentUserId={currentUser.id}
   disabled={!canClickBoard}
-  revealAll={currentUser.role === "WordMaster"}
+  revealAll={currentUser.role === "WordMaster"||reveal}
   isGuesser={currentUser.role === "Guesser"}
   currentUserRole={currentUser.role}   
 />
