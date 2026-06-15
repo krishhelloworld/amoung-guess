@@ -6,6 +6,7 @@
 ## on reveal the word will be removed
 ## increase the blur value on 
 ## some time the array have the elements 
+- something is broken the wordclick because the 
 
 ## 2)fix chatbot -;
 <!-- - Only thier respective team members can chat in thier respective chatbox -->

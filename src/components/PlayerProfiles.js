@@ -13,6 +13,7 @@ export default function PlayerProfiles({
       name: `Player${nextId}`,
       team: nextId % 2 === 0 ? "blue" : "orange",
       role: "Guesser",
+      maxVotes: 0,
     };
     setProfiles([...profiles, newProfile]);
   };

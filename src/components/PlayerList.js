@@ -5,25 +5,16 @@ import owm from "../assets/IMAGES/owm.jpg"; // Orange Word Master image
 function PlayerList({ players, variant = 1 }) {
   const sortByGuesses = (list) =>
     [...list].sort((a, b) => (b.correctGuesses || 0) - (a.correctGuesses || 0));
-
-  const blueMaster =
-    players.find((p) => p.team === "Blue" && p.role === "Clue Giver") || {
-      id: 100,
-      name: "daddy cool",
-      team: "Blue",
-      role: "Clue Giver",
-      correctGuesses: 0,
-    };
-
-  const orangeMaster =
-    players.find((p) => p.team === "Orange" && p.role === "Clue Giver") || {
-      id: 101,
-      name: "kirmadaa",
-      team: "Orange",
-      role: "Clue Giver",
-      correctGuesses: 0,
-    };
-
+const BlueWordMaster =players.map((p)=> {
+  if (p.role=== "WordMaster" && p.team=== "blue"){
+  return p.name   
+  }
+})
+const OrangeWordMaster=players.map((p)=> {
+  if (p.role=== "WordMaster" && p.team=== "orange"){
+ return p.name  
+  }
+})
   const bluePlayers = sortByGuesses(
     players.filter((p) => p.team === "Blue" && p.role !== "Clue Giver")
   );
@@ -128,7 +119,7 @@ function PlayerList({ players, variant = 1 }) {
     }
   };
 
-  const renderTeam = (teamName, color, master, list) => {
+  const renderTeam = (teamName, color, WordMaster, list) => {
     const isBlue = color === "blue";
     return (
 
@@ -174,7 +165,7 @@ function PlayerList({ players, variant = 1 }) {
           </div>
           <div className="flex flex-col">
             <span className="text-white font-bold pr-4  text-lg truncate ">
-              {master.name}
+            {WordMaster}
             </span>
            
           </div>
@@ -200,8 +191,8 @@ function PlayerList({ players, variant = 1 }) {
 
   return (
     <>
-      {renderTeam("Blue", "blue", blueMaster, bluePlayers)}
-      {renderTeam("Orange", "orange", orangeMaster, orangePlayers)}
+      {renderTeam("Blue", "blue",BlueWordMaster, bluePlayers)}
+      {renderTeam("Orange", "orange",OrangeWordMaster, orangePlayers)}
     </>
   );
 }

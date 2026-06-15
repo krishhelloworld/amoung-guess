@@ -24,33 +24,32 @@ function shuffle(arr){
  function isNoun(word) {
     return nlp(word).nouns().out("array").length > 0;
   }
+  function getMajorityThreshold(playerCount) {
+    if (playerCount <= 1) return 1;        // solo / test mode
+    return Math.floor(playerCount / 2) + 1; // 50% + 1 for even counts, correct for odd too
+  }
 // ----- helpers -----
 
 const opponentOf = (t) => (t === "blue" ? "orange" : "blue");
 const CapTeam = (t) => (t === "blue" ? "Blue" : "Orange");
 
 
-
 //this might be wrong need to fix it the 
 //5-> | 2 | | 1 | 1 | 1 |
 //we need the array of cards having no of  voted and then select max if cant then we draw it  
-function getMajorityThreshold(playerCount) {
-  if (playerCount <= 1) return 1;        // solo / test mode
-  return Math.floor(playerCount / 2) + 1; // 50% + 1 for even counts, correct for odd too
-}
 
 export default function GameScreen() {
   // --- tester profiles (single source of truth) ---
   const [profiles, setProfiles] = useState([
-    { id: 1, name: "Carry", team: "blue", role: "Guesser" },
-    { id: 2, name: "Alex", team: "orange", role: "Guesser" },
-    { id: 3, name: "Sam", team: "blue", role: "WordMaster" },
-    { id: 4, name: "Lara", team: "orange", role: "WordMaster" },
-    { id: 5, name: "Jordan", team: "blue", role: "Jester" }
+    { id: 1, name: "Carry", team: "blue", role: "Guesser" ,canClick : true, maxVotes: 0},
+    { id: 2, name: "Alex", team: "orange", role: "Guesser",canClick : true, maxVotes: 0 },
+    { id: 3, name: "Sam", team: "blue", role: "WordMaster",canClick :false , maxVotes: 0 },
+    { id: 4, name: "Lara", team: "orange", role: "WordMaster",canClick :false, maxVotes: 0 },
+    { id: 5, name: "Jordan", team: "blue", role: "Jester",canClick : true, maxVotes: 0 }
   ]);
 
   const assignTeamsToWords = () => {
-const nouns =  generate(30);
+const nouns =  generate(200).filter(isNoun).slice(0,30);
     const Words = shuffle([
       ...Array(9).fill("blue"),
       ...Array(8).fill("orange"),
@@ -99,8 +98,8 @@ const nouns =  generate(30);
   const [guessRemaining, setGuessRemaining] = useState(0);
 
   // timers
-  const [blueTime, setBlueTime] = useState(30);
-  const [orangeTime, setOrangeTime] = useState(30);
+  const [blueTime, setBlueTime] = useState(60);
+  const [orangeTime, setOrangeTime] = useState(60);
 
   // guard to avoid double draw-processing per clue
   const drawHandledRef = useRef(false);
@@ -138,25 +137,30 @@ const [reveal, setReveal]= useState(gameOver);
     [phase, currentUser, currentTeam, gameOver]
   );
 
-  // --- timers: simple + stable ---
+  //=====this is set to check the time because it time changes like her mood 
   useEffect(() => {
+console.log(currentTeam);
     const active = phase === "Clue Phase" || phase === "Guess Phase";
     if (!active || gameOver) return;
+    if(blueTime ===0 ||  orangeTime === 0 ) {
+      setGuessRemaining(0);
+      setCurrentTeam(opponentOf(currentTeam));
+      console.log(currentTeam);
+      setPhase("Clue Phase")
+      setBlueTime(60);
+      setOrangeTime(60);
+      resolutionLockRef.current = false;
+      return;
+    }
     const id = setInterval(() => {
       if (currentTeam === "blue") {
         setBlueTime((t) => Math.max(0, t - 1));
+      console.log("i am blue time");
       } else {
         setOrangeTime((t) => Math.max(0, t - 1));
+        console.log("i am ornage time ");
       }
     }, 1000);
-    if(blueTime ===0 ||  orangeTime === 0 ) {
-    setPhase(`${opponentOf(currentTeam)} Wins!`);
-      setGuessRemaining(0);
-      setReveal(true);
-      resolutionLockRef.current = false;
-
-      return;
-    }
     return () => clearInterval(id);
   }, [phase, currentTeam, gameOver,blueTime,orangeTime]);     
 
@@ -176,10 +180,10 @@ const [reveal, setReveal]= useState(gameOver);
   setPhase("Guess Phase");
   setGuessRemaining(normalized.count);
   if(currentTeam === "blue"){
-    setBlueTime(30);
+    setBlueTime(10);
   }
   else{
-  setOrangeTime(30)
+  setOrangeTime(10)
   }
   // 🔧 Clear per-round votes on ALL tiles (revealed or not).
   //    This prevents old profiles from being mistakenly "at cap".
@@ -194,23 +198,35 @@ const [reveal, setReveal]= useState(gameOver);
 };
 
 
-
+  
 // ----------------------------------------------------------------------------------------------------------------------
             // ----- guesser voting -----
 // ----------------------------------------------------------------------------------------------------------------------
 
 const handleVote = (index, playerId) => {
   // block while a resolution is in-flight
+  //-----Checking elegiblity to enter function ----
+  if(profiles[playerId-1].maxVotes >= clue.count) return ;
+  setProfiles((prev)=>(
+    prev.map((p)=> {
+     if(p.id == playerId) {
+      return {...p, maxVotes: p.maxVotes + 1} ;
+     }
+     else {
+      return p ;
+     }}))  
+  )
+  
   if (resolutionLockRef.current) return;
-
+  const tile = words[index];
   if (phase !== "Guess Phase") return;
   if (playerId !== currentUser.id) return; // only active profile
   if (currentUser.role !== "Guesser" || currentUser.team !== currentTeam) return;
-
+  
   const teamGuessers = profiles.filter((p) => p.team === currentTeam && p.role === "Guesser");
   const cap = Number(clue.count || 0);
   const majority = getMajorityThreshold(teamGuessers.length);
-
+  
   let computedNext = null;
   let revealNow = false;
   let revealTeam = null;
@@ -234,20 +250,23 @@ const handleVote = (index, playerId) => {
 
       const votesHere = Array.isArray(w.votes) ? [...w.votes] : [];
       if (votesHere.includes(playerId)) return w; // duplicate vote blocked
-
+      
       votesHere.push(playerId);
       const newW = { ...w, votes: votesHere };
-
+      
+      console.log("w=>"+w +"votes here => "+ votesHere)
       // majority check
       if (votesHere.length >= majority) {
         newW.revealed = true;
         revealNow = true;
         revealTeam = newW.team;
         revealIndex = i;
-         resolveTileOutcome(newW.team, i);
+        resolveTileOutcome(newW.team, i);
       }
+      console.log(newW);
       return newW;
     });
+
 
     computedNext = next;
     return next;
@@ -289,8 +308,10 @@ if (revealNow && revealTeam !== null && revealIndex !== null) {
 // ----------------------------------------------------------------------------------------------------------------------
 
 const resolveTileOutcome = (index, clickedTeam) => {
-  const opp = opponentOf(currentTeam);
+  if(profiles[currentUser.id-1].maxVotes >= clue.count) return ;
 
+  const opp = opponentOf(currentTeam);
+console.log(clickedTeam,opp,currentTeam);
   // Check all Jesters
   Object.entries(trapWords).forEach(([pid, trapIndex]) => {
     const jester = profiles.find(p => p.id === Number(pid));//this 
@@ -349,14 +370,14 @@ const resolveTileOutcome = (index, clickedTeam) => {
     // Correct team found
     if (clickedTeam === currentTeam) {
       if (currentTeam === "blue") {
-        setBlueTime(30);
+        setBlueTime(10);
         setBlueScore((s) => {
           const next = s - 1;
           if (next <= 0) setPhase("Blue Wins!");
           return next;
         });
       } else {
-        setOrangeTime(30);
+        setOrangeTime(10);
         setOrangeScore((s) => {
           const next = s - 1;
           if (next <= 0) setPhase("Orange Wins!");
@@ -423,10 +444,16 @@ const resolveTileOutcome = (index, clickedTeam) => {
 
 
 const handleWordClick = (index) => {
-  if (currentUser.role !== "WordMaster") return;
+  if(profiles[currentUser.id-1].maxVotes >= clue.count) return ;
+
+  if (currentUser.role !== "WordMaster") {
+    console.log("427");
+    return;}
+  console.log("432");
   const tile = words[index];
   if (!tile || tile.revealed) return;
 
+  
   // mark revealed immediately
   setWords((prev) => prev.map((w, i) => (i === index ? { ...w, revealed: true } : w)));
 
