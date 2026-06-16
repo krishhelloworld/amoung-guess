@@ -30,6 +30,11 @@ socket.on("create-room",(playerName)=>{
         }
         ]
     }
+    console.log("something triggered to create the room")
+    console.log(playerName)
+    console.log(roomCode)
+    console.log(socket.id)
+    console.log(rooms[roomCode])
     socket.join(roomCode)
     socket.emit("room Created",roomCode);
     socket.to(roomCode).emit(

@@ -12,6 +12,7 @@ function EnterName({ onClose,roomCode,setRoomCode }) {
     }
 
     socket.emit("create-room",name)
+    console.log(name)
     onClose();
   };
 
@@ -49,7 +50,7 @@ function EnterName({ onClose,roomCode,setRoomCode }) {
           "
         />
 </div>
-<div>
+{/* <div>
         <input
           type="text"
           value={roomCode}
@@ -69,7 +70,7 @@ function EnterName({ onClose,roomCode,setRoomCode }) {
             focus:border-orange-500
           "
         />
-</div>
+</div> */}
         <div className="flex gap-3 mt-5">
           <button
             onClick={handleJoin}
@@ -119,7 +120,7 @@ navigate('/game',{
   state: { roomCode }
 })
     })
-  })
+  },[navigate])
   return (
     <>
       <div
