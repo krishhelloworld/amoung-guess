@@ -3,10 +3,20 @@
 
 ## 1) Timeout Logic-;
 - chance change on TimeOut  
-## on reveal the word will be removed
-## increase the blur value on 
-## some time the array have the elements 
-- something is broken the wordclick because the 
+
+## Bugs -; 
+- vote click = how much word count
+- on reveal the word will be removed
+- increase the blur value on 
+- some time the array have same the elements 
+- block the option of vote after the guess phase stops 
+## settings -;
+word options in settings where the admin can select the options like-;
+- nouns 
+- actors name
+- movie name
+- places /atlas
+- 
 
 ## 2)fix chatbot -;
 <!-- - Only thier respective team members can chat in thier respective chatbox -->
