@@ -10,7 +10,7 @@ import fightBg from "../assets/IMAGES/gs.png";
 import PlayerProfiles from "../components/PlayerProfiles";
 import nlp from  "compromise";
 import {generate} from "random-words";
-
+import {socket} from '../services/socket.js';
 
 
 //============= USEABLE FUNCTIONS IN LOGICS ===============
@@ -137,9 +137,18 @@ const [reveal, setReveal]= useState(gameOver);
     [phase, currentUser, currentTeam, gameOver]
   );
 
+  //---------------------SOCKET.IO USEEFFECT CONNECTION --------------------
+useEffect(()=>{
+    socket.on("connect",()=>{
+      console.log("user Connected succesfully ",socket.id)
+    })
+return ()=>{
+  socket.off("connect");
+}
+});
   //=====this is set to check the time because it time changes like her mood 
   useEffect(() => {
-console.log(currentTeam);
+
     const active = phase === "Clue Phase" || phase === "Guess Phase";
     if (!active || gameOver) return;
     if(blueTime ===0 ||  orangeTime === 0 ) {
@@ -161,7 +170,10 @@ console.log(currentTeam);
         console.log("i am ornage time ");
       }
     }, 1000);
-    return () => clearInterval(id);
+    return () => {
+      clearInterval(id);
+      socket.off("connect");
+    }
   }, [phase, currentTeam, gameOver,blueTime,orangeTime]);     
 
 // ----------------------------------------------------------------------------------------------------------------------

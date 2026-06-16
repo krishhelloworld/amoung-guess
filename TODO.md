@@ -5,6 +5,11 @@
 - chance change on TimeOut  
 
 ## Bugs -; 
+- reset the Profile maxVotes after the phase end 
+-setPhase how?? 
+should i create a new click state which will be equal to the guesser teamates * clueCount and in if  guesser clicked* cluecount==  guesser teamates * clueCount
+or should i add the count ++ inside the votes >= majority and then if count > cluecount then i would open the 
+
 - vote click = how much word count
 - on reveal the word will be removed
 - increase the blur value on 
@@ -63,6 +68,7 @@ word options in settings where the admin can select the options like-;
 ## ROLES-; [ this to feel the one person game to everyone ,such that they can have thier opinions ]
 
 - 1)jester
+# GuesserTeam
 - 2)swapper     //every team have this 
 - 3)role guesser  //1 per game //either guess the jester in own team or guess roles of other teams
 - 4)identity stealer -> highlight a word ,can chat in opponent chats  //1 per game 

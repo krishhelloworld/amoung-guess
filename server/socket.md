@@ -159,4 +159,65 @@ If you want next level, I can show you:
 🔥 authentication with JWT in handshake
 
 Just tell me 👍
-a
+
+
+
+
+# 🔥 KEY DIFFERENCE
+
+
+| Feature            | socket.io (server) | socket.io-client   |
+| ------------------ | ------------------ | ------------------ |
+| Runs on            | Node.js server     | Browser / frontend |
+| Role               | controls system    | connects to system |
+| Creates connection | YES                | NO                 |
+| Receives users     | YES                | NO                 |
+| Sends events       | YES                | YES                |
+| Manages rooms      | YES                | NO                 |
+
+---
+
+# 🚀 REAL FLOW (VERY IMPORTANT)
+
+```text id="f1"
+CLIENT (socket.io-client)
+        ↓ connect
+SERVER (socket.io)
+
+CLIENT sends event → SERVER receives
+SERVER sends event → CLIENT receives
+```
+
+---
+
+# 🎮 Example (CHAT APP)
+
+## 🖥️ SERVER (socket.io)
+
+```js id="s3"
+io.on("connection", (socket) => {
+  console.log("User connected");
+
+  socket.on("message", (msg) => {
+    io.emit("message", msg);
+  });
+});
+```
+
+---
+
+## 🌐 CLIENT (socket.io-client)
+
+```js id="s4"
+import { io } from "socket.io-client";
+
+const socket = io("http://localhost:3000");
+
+socket.emit("message", "Hello Server!");
+
+socket.on("message", (msg) => {
+  console.log("Received:", msg);
+});
+```
+
+---

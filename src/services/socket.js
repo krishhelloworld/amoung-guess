@@ -1,5 +1,2 @@
-import {io} from "socket.io-client";
-
-
-const socket = io("https://localhost:3000");
-export default socket;
+import {io} from 'socket.io-client'
+export const socket = io("http://localhost:5001")
