@@ -10,7 +10,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<StartMatch />} />
-          <Route path="/game" element={<GameScreen />} />
+          <Route path="/game/:abs" element={<GameScreen />} />
         </Routes>
       </Router>
     </GameProvider>

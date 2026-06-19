@@ -5,13 +5,23 @@ import {socket} from '../services/socket.js';
 function EnterName({ onClose,roomCode,setRoomCode }) {
   const [name, setName] = useState("");
 
+  const navigate= useNavigate();
   const handleJoin = () => {
     if (!name.trim()) {
       alert("Please enter your name");
       return;
     }
 
-    socket.emit("create-room",name)
+    socket.emit("create-room",{name},(response=>{
+      const roomId = response.roomCode;
+      const room = response.rooms;
+      console.log(room[roomId])
+      navigate(`/game/${roomId}`);
+    })
+    )
+    const API = window.location.origin ;
+    console.log(API)
+    navigator.clipboard.writeText(API)
     console.log(name)
     onClose();
   };
@@ -113,14 +123,6 @@ function StartMatch() {
   const navigate = useNavigate();
   const [showEnterName, setShowEnterName] = useState(false);
 const [roomCodes, setRoomCodes] = useState("")
-  useEffect(()=>{
-    socket.on("room-created",(roomCode)=>{
-console.log("room Created", roomCode)
-navigate('/game',{
-  state: { roomCode }
-})
-    })
-  },[navigate])
   return (
     <>
       <div
@@ -141,16 +143,16 @@ navigate('/game',{
               hover:bg-orange-500
               hover:scale-105
               transition
-            "
-            onClick={() => setShowEnterName(true)}
-          >
-            Join Game
+              "
+              onClick={() => setShowEnterName(true)}
+              >
+            Create Game
           </button>
 
           {/* Create Game Button */}
           <button
             className="
-              px-8
+            px-8
               py-4
               bg-black
               text-white
@@ -160,10 +162,10 @@ navigate('/game',{
               hover:bg-orange-500
               hover:scale-105
               transition
-            "
-            onClick={() => navigate("/game")}
-          >
-            Create Game
+              "
+              onClick={() => navigate("/game")}
+              >
+            Join Game
           </button>
         </div>
       </div>

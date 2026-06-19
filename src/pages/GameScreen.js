@@ -12,7 +12,6 @@ import nlp from  "compromise";
 import {generate} from "random-words";
 import {socket} from '../services/socket.js';
 
-
 //============= USEABLE FUNCTIONS IN LOGICS ===============
 function shuffle(arr){
   for(let i= arr.length - 1; i>0 ; i--){
