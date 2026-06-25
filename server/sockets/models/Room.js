@@ -26,3 +26,6 @@ export default function Room(roomCode, socketId, isAdmin, playerName) {
     }
   }
 }
+// export function GiveRooms({roomoCode}){
+//     return rooms[roomCode]
+// }

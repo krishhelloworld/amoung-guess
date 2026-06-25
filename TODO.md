@@ -1,5 +1,9 @@
 
 # todo tasks-:
+## server Handling 
+- playername should be given in the name of profile 
+- 
+
 
 ## 1) Timeout Logic-;
 - chance change on TimeOut  
