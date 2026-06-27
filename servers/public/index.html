@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AKTU Result Checker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0b0f1a;
+      --surface: #131929;
+      --surface2: #1a2236;
+      --border: #232f47;
+      --accent: #3b7eff;
+      --accent2: #00d4aa;
+      --warn: #ff6b4a;
+      --pass: #00d4aa;
+      --fail: #ff4a6b;
+      --text: #e8edf8;
+      --muted: #6b7fa3;
+      --card: #161e30;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 18px 32px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--surface);
+    }
+
+    .logo-badge {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 700; color: #fff;
+    }
+
+    header h1 {
+      font-size: 1.1rem; font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    header span {
+      font-size: 0.75rem; color: var(--muted);
+      margin-left: 4px;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      max-width: 680px;
+      margin: 64px auto 0;
+      padding: 0 24px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      background: rgba(0,212,170,0.08);
+      border: 1px solid rgba(0,212,170,0.2);
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+
+    .hero h2 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .hero h2 em {
+      font-style: normal;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+
+    /* ── Search Box ── */
+    .search-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 16px;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .roll-input {
+      flex: 1;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1rem;
+      color: var(--text);
+      letter-spacing: 0.05em;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .roll-input::placeholder { color: var(--muted); letter-spacing: 0.02em; }
+    .roll-input:focus { border-color: var(--accent); }
+
+    .btn-check {
+      background: linear-gradient(135deg, var(--accent), #2563eb);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 14px 28px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      white-space: nowrap;
+    }
+
+    .btn-check:hover { opacity: 0.9; }
+    .btn-check:active { transform: scale(0.98); }
+    .btn-check:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .hint {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 12px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ── Loading ── */
+    .loading {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 48px 0;
+      color: var(--muted);
+    }
+
+    .spinner {
+      width: 40px; height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      text-align: left;
+    }
+
+    .step-item {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.82rem;
+      font-family: 'JetBrains Mono', monospace;
+      opacity: 0.4;
+      transition: opacity 0.4s;
+    }
+
+    .step-item.active { opacity: 1; color: var(--accent2); }
+    .step-item.done { opacity: 0.6; }
+    .step-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+    /* ── Error ── */
+    .error-box {
+      display: none;
+      background: rgba(255,74,107,0.08);
+      border: 1px solid rgba(255,74,107,0.25);
+      border-radius: 12px;
+      padding: 16px 20px;
+      color: var(--fail);
+      font-size: 0.9rem;
+      margin-top: 16px;
+    }
+
+    /* ── Result ── */
+    #result-area {
+      max-width: 900px;
+      margin: 40px auto 60px;
+      padding: 0 24px;
+      display: none;
+    }
+
+    .result-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+
+    .student-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .student-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .meta-chip {
+      font-size: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 10px;
+      color: var(--muted);
+    }
+
+    .meta-chip strong { color: var(--text); }
+
+    .result-tag {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .tag-pass { background: rgba(0,212,170,0.12); color: var(--pass); border: 1px solid rgba(0,212,170,0.25); }
+    .tag-fail { background: rgba(255,74,107,0.12); color: var(--fail); border: 1px solid rgba(255,74,107,0.25); }
+
+    /* ── Semester Tabs ── */
+    .sem-tabs {
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      margin-bottom: 24px;
+      scrollbar-width: none;
+    }
+
+    .sem-tab {
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+
+    .sem-tab:hover { color: var(--text); border-color: var(--accent); }
+    .sem-tab.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+    /* ── Marks Table ── */
+    .sem-panel { display: none; }
+    .sem-panel.active { display: block; }
+
+    .marks-table-wrap {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .marks-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.87rem;
+    }
+
+    .marks-table th {
+      background: var(--surface2);
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .marks-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(35,47,71,0.5);
+      vertical-align: middle;
+    }
+
+    .marks-table tr:last-child td { border-bottom: none; }
+    .marks-table tr:hover td { background: rgba(59,126,255,0.04); }
+
+    .marks-table td:first-child {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .grade-pill {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .grade-O, .grade-A  { background: rgba(0,212,170,0.12); color: var(--pass); }
+    .grade-B { background: rgba(59,126,255,0.12); color: var(--accent); }
+    .grade-C, .grade-D { background: rgba(255,107,74,0.12); color: var(--warn); }
+    .grade-F { background: rgba(255,74,107,0.12); color: var(--fail); }
+    .grade-default { background: var(--surface2); color: var(--muted); }
+
+    /* ── SGPA summary card ── */
+    .sgpa-card {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .sgpa-item {
+      flex: 1;
+      min-width: 120px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+    }
+
+    .sgpa-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 8px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .sgpa-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── Raw HTML fallback ── */
+    #raw-iframe {
+      display: none;
+      width: 100%;
+      min-height: 600px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: white;
+    }
+
+    /* Scroll bar style */
+    ::-webkit-scrollbar { height: 4px; width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    @media (max-width: 600px) {
+      .input-row { flex-direction: column; }
+      .btn-check { width: 100%; }
+      header { padding: 14px 16px; }
+      .hero { margin-top: 36px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-badge">A</div>
+  <div>
+    <h1>AKTU Result Checker <span>— No DOB Required</span></h1>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="eyebrow">AKTU · OneView · Instant</div>
+  <h2>Check your result with<br/><em>roll number only</em></h2>
+  <p>Full marksheet with subject-wise marks, grades, and SGPA.<br/>No date of birth. No CAPTCHA. Instantly.</p>
+
+  <div class="search-card">
+    <div class="input-row">
+      <input
+        type="text"
+        class="roll-input"
+        id="rollInput"
+        placeholder="Enter roll number e.g. 2201234567"
+        maxlength="15"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <button class="btn-check" id="checkBtn" onclick="checkResult()">
+        Check Result →
+      </button>
+    </div>
+    <div class="hint">↳ Works for B.Tech, MBA, MCA, B.Pharm and all AKTU courses</div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <div class="loading-steps">
+      <div class="step-item" id="step1"><div class="step-dot"></div> Connecting to AKTU OneView portal...</div>
+      <div class="step-item" id="step2"><div class="step-dot"></div> Priming session (bypassing DOB requirement)...</div>
+      <div class="step-item" id="step3"><div class="step-dot"></div> Fetching your marksheet...</div>
+      <div class="step-item" id="step4"><div class="step-dot"></div> Parsing result data...</div>
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div class="error-box" id="errorBox"></div>
+</div>
+
+<!-- Result Area -->
+<div id="result-area">
+
+  <div class="result-header">
+    <div>
+      <div class="student-name" id="studentName">—</div>
+      <div class="student-meta" id="studentMeta"></div>
+    </div>
+    <div id="resultTag"></div>
+  </div>
+
+  <!-- SGPA summary -->
+  <div class="sgpa-card" id="sgpaCard" style="display:none"></div>
+
+  <!-- Semester tabs -->
+  <div class="sem-tabs" id="semTabs"></div>
+
+  <!-- Semester panels -->
+  <div id="semPanels"></div>
+
+  <!-- Raw HTML iframe fallback -->
+  <iframe id="raw-iframe" title="AKTU Result"></iframe>
+</div>
+
+<script>
+  let currentTab = 0;
+
+  function setStep(n) {
+    ['step1','step2','step3','step4'].forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (i < n) { el.className = 'step-item done'; }
+      else if (i === n) { el.className = 'step-item active'; }
+      else { el.className = 'step-item'; }
+    });
+  }
+
+  async function checkResult() {
+    const roll = document.getElementById('rollInput').value.trim();
+    if (!roll) { showError('Please enter a roll number.'); return; }
+
+    // Reset UI
+    document.getElementById('result-area').style.display = 'none';
+    document.getElementById('errorBox').style.display = 'none';
+    document.getElementById('loading').style.display = 'flex';
+    document.getElementById('checkBtn').disabled = true;
+    setStep(0);
+
+    // Animate steps
+    const stepDelay = [0, 1200, 2400, 3600];
+    stepDelay.forEach((d, i) => setTimeout(() => setStep(i), d));
+
+    try {
+      const res = await fetch('/api/result', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ rollNumber: roll }),
+      });
+
+      const data = await res.json();
+      setStep(3);
+      await delay(600);
+
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('checkBtn').disabled = false;
+
+      if (!res.ok || data.error) {
+        showError(data.error || 'Something went wrong. Try again.');
+        return;
+      }
+
+      renderResult(data);
+
+    } catch (err) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('checkBtn').disabled = false;
+      showError('Network error. Make sure the server is running and try again.');
+    }
+  }
+
+  function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  function showError(msg) {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('checkBtn').disabled = false;
+    const box = document.getElementById('errorBox');
+    box.textContent = '⚠️ ' + msg;
+    box.style.display = 'block';
+  }
+
+  function gradeClass(g) {
+    if (!g) return 'grade-default';
+    const u = g.toUpperCase();
+    if (u === 'O' || u === 'EX') return 'grade-O';
+    if (u.startsWith('A')) return 'grade-A';
+    if (u.startsWith('B')) return 'grade-B';
+    if (u.startsWith('C') || u.startsWith('D')) return 'grade-C';
+    if (u === 'F' || u === 'FAIL' || u.includes('FAIL')) return 'grade-F';
+    return 'grade-default';
+  }
+
+  function renderResult(data) {
+    const { parsed, rawHtml, rollNumber } = data;
+    const area = document.getElementById('result-area');
+    area.style.display = 'block';
+
+    // Student info
+    const info = parsed.studentInfo || {};
+    const nameKey = Object.keys(info).find(k => k.toLowerCase().includes('name'));
+    const name = nameKey ? info[nameKey] : (rollNumber || '—');
+    document.getElementById('studentName').textContent = name || rollNumber;
+
+    // Meta chips
+    const metaDiv = document.getElementById('studentMeta');
+    metaDiv.innerHTML = '';
+    const chipKeys = Object.keys(info).filter(k => !k.toLowerCase().includes('name')).slice(0, 6);
+    chipKeys.forEach(k => {
+      metaDiv.innerHTML += `<span class="meta-chip">${k}: <strong>${info[k]}</strong></span>`;
+    });
+    if (!chipKeys.length) {
+      metaDiv.innerHTML = `<span class="meta-chip">Roll No: <strong>${rollNumber}</strong></span>`;
+    }
+
+    // Try to detect overall SGPA/CGPA from info
+    const sgpaCard = document.getElementById('sgpaCard');
+    sgpaCard.innerHTML = '';
+    const sgpaKey = Object.keys(info).find(k => k.toLowerCase().includes('sgpa'));
+    const cgpaKey = Object.keys(info).find(k => k.toLowerCase().includes('cgpa'));
+    if (sgpaKey || cgpaKey) {
+      sgpaCard.style.display = 'flex';
+      if (sgpaKey) {
+        sgpaCard.innerHTML += `<div class="sgpa-item"><div class="sgpa-label">SGPA</div><div class="sgpa-value">${info[sgpaKey]}</div></div>`;
+      }
+      if (cgpaKey) {
+        sgpaCard.innerHTML += `<div class="sgpa-item"><div class="sgpa-label">CGPA</div><div class="sgpa-value">${info[cgpaKey]}</div></div>`;
+      }
+    } else {
+      sgpaCard.style.display = 'none';
+    }
+
+    // Result tag
+    const tagDiv = document.getElementById('resultTag');
+    const passKey = Object.keys(info).find(k => k.toLowerCase().includes('result') || k.toLowerCase().includes('status'));
+    if (passKey) {
+      const val = info[passKey].toLowerCase();
+      const isPass = val.includes('pass') || val.includes('p');
+      tagDiv.innerHTML = `<span class="result-tag ${isPass ? 'tag-pass' : 'tag-fail'}">${info[passKey]}</span>`;
+    } else {
+      tagDiv.innerHTML = '';
+    }
+
+    const semTabs = document.getElementById('semTabs');
+    const semPanels = document.getElementById('semPanels');
+    semTabs.innerHTML = '';
+    semPanels.innerHTML = '';
+
+    const iframe = document.getElementById('raw-iframe');
+
+    if (parsed.rawFound && parsed.semesters.length > 0) {
+      iframe.style.display = 'none';
+
+      parsed.semesters.forEach((sem, idx) => {
+        // Tab
+        const tab = document.createElement('div');
+        tab.className = 'sem-tab' + (idx === 0 ? ' active' : '');
+        tab.textContent = parsed.semesters.length === 1 ? 'Marksheet' : `Table ${idx + 1}`;
+        tab.onclick = () => switchTab(idx);
+        semTabs.appendChild(tab);
+
+        // Panel
+        const panel = document.createElement('div');
+        panel.className = 'sem-panel' + (idx === 0 ? ' active' : '');
+        panel.id = 'panel-' + idx;
+
+        // Look for SGPA in rows
+        let sgpaFromRows = null;
+        sem.rows.forEach(row => {
+          const flat = row.join(' ').toLowerCase();
+          if (flat.includes('sgpa') || flat.includes('cgpa')) {
+            sgpaFromRows = row;
+          }
+        });
+
+        let tableHtml = `<div class="marks-table-wrap"><table class="marks-table"><thead><tr>`;
+        const hdrs = sem.headers.length ? sem.headers : sem.rows[0] || [];
+        hdrs.forEach(h => { tableHtml += `<th>${h || '—'}</th>`; });
+        tableHtml += `</tr></thead><tbody>`;
+
+        sem.rows.forEach(row => {
+          tableHtml += '<tr>';
+          row.forEach((cell, ci) => {
+            const hdr = (hdrs[ci] || '').toLowerCase();
+            const isGrade = hdr.includes('grade') || hdr.includes('letter');
+            const isMark = hdr.includes('mark') || hdr.includes('obtain');
+            if (isGrade && cell) {
+              tableHtml += `<td><span class="grade-pill ${gradeClass(cell)}">${cell}</span></td>`;
+            } else {
+              tableHtml += `<td>${cell || '—'}</td>`;
+            }
+          });
+          tableHtml += '</tr>';
+        });
+
+        tableHtml += `</tbody></table></div>`;
+        panel.innerHTML = tableHtml;
+        semPanels.appendChild(panel);
+      });
+
+    } else {
+      // Fallback: render raw HTML in iframe
+      semTabs.innerHTML = '';
+      semPanels.innerHTML = `<p style="color:var(--muted);font-size:0.9rem;margin-bottom:12px;">The result page loaded — showing it below. Structured parsing couldn't extract tables (AKTU may have changed their layout).</p>`;
+      iframe.style.display = 'block';
+      const blob = new Blob([rawHtml], { type: 'text/html' });
+      iframe.src = URL.createObjectURL(blob);
+    }
+
+    area.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function switchTab(idx) {
+    document.querySelectorAll('.sem-tab').forEach((t, i) => {
+      t.classList.toggle('active', i === idx);
+    });
+    document.querySelectorAll('.sem-panel').forEach((p, i) => {
+      p.classList.toggle('active', i === idx);
+    });
+  }
+
+  // Enter key support
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('rollInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter') checkResult();
+    });
+  });
+</script>
+</body>
+</html>
