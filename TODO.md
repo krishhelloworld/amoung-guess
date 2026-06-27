@@ -4,9 +4,11 @@
 - playername should be given in the name of profile 
 - 
 
+# Game logic Distribution
 
-## 1) Timeout Logic-;
-- chance change on TimeOut  
+
+<!-- ## 1) Timeout Logic-;
+- chance change on TimeOut   -->
 
 ## Bugs -; 
 - reset the Profile maxVotes after the phase end 

@@ -12,17 +12,13 @@ import nlp from  "compromise";
 import {generate} from "random-words";
 import {socket} from '../services/socket.js';
 
+//====================Export Game logic here=================
+
+import AssignTeamToWords from './gamelogic/AssignTeamToWords.js'
+import { useProfiles } from './gamelogic/Profiles.js'
+
 //============= USEABLE FUNCTIONS IN LOGICS ===============
-function shuffle(arr){
-  for(let i= arr.length - 1; i>0 ; i--){
-    const j = Math.floor(Math.random() * (i+1));
-    [arr[j],arr[i]]= [arr[i],arr[j]];
-  }
-  return arr;
-}
- function isNoun(word) {
-    return nlp(word).nouns().out("array").length > 0;
-  }
+
   function getMajorityThreshold(playerCount) {
     if (playerCount <= 1) return 1;        // solo / test mode
     return Math.floor(playerCount / 2) + 1; // 50% + 1 for even counts, correct for odd too
@@ -32,50 +28,26 @@ function shuffle(arr){
 const opponentOf = (t) => (t === "blue" ? "orange" : "blue");
 const CapTeam = (t) => (t === "blue" ? "Blue" : "Orange");
 
-
 //this might be wrong need to fix it the 
 //5-> | 2 | | 1 | 1 | 1 |
 //we need the array of cards having no of  voted and then select max if cant then we draw it  
 
 export default function GameScreen() {
   // --- tester profiles (single source of truth) ---
-  const [profiles, setProfiles] = useState([
-    { id: 1, name: "Carry", team: "blue", role: "Guesser" ,canClick : true, maxVotes: 0},
-    { id: 2, name: "Alex", team: "orange", role: "Guesser",canClick : true, maxVotes: 0 },
-    { id: 3, name: "Sam", team: "blue", role: "WordMaster",canClick :false , maxVotes: 0 },
-    { id: 4, name: "Lara", team: "orange", role: "WordMaster",canClick :false, maxVotes: 0 },
-    { id: 5, name: "Jordan", team: "blue", role: "Jester",canClick : true, maxVotes: 0 }
-  ]);
+  const {profiles, setProfiles} = useProfiles();
 
-  const assignTeamsToWords = () => {
-const nouns =  generate(200).filter(isNoun).slice(0,30);
-    const Words = shuffle([
-      ...Array(9).fill("blue"),
-      ...Array(8).fill("orange"),
-      ...Array(11).fill("neutral"),
-      "white",
-      "Jester",
-    ]);
-  //9+8+6+2+5
-    return Array.from({ length: 30 }, (_, i) => ({
-      id: i,
-      word:nouns[i],
-      revealed: false,
-      team: Words[i],
-      votes: [], // per-round votes (playerIds)
-      resolved: false, // has this tile already had its outcome applied?
-    }));
-  };
   // After profiles state
   const [trapWords, setTrapWords] = useState(() => {
     const obj = {};
     profiles.forEach(p => {
       if (p.role === "Jester") {
         const unrevealed = Array.from({ length: 25 }, (_, i) => i);
+        console.log("Math.random()=>",Math.random(),"unrevealed length=>",unrevealed.length,"=",(Math.random() * unrevealed.length))
         const randomJesterIndex = unrevealed[Math.floor(Math.random() * unrevealed.length)];
         obj[p.id] =randomJesterIndex ; // store by Jester’s playerId
       }
     });
+    console.log("obj",obj)
     return obj; // {playerId: wordIndex} why not directly index why to create obj
 });
 
@@ -86,7 +58,7 @@ const nouns =  generate(200).filter(isNoun).slice(0,30);
 
 
   // --- board + game state ---
-  const [words, setWords] = useState(assignTeamsToWords);
+  const [words, setWords] = useState(AssignTeamToWords);
   const [phase, setPhase] = useState("Clue Phase");
   const [currentTeam, setCurrentTeam] = useState("blue");
   const [blueScore, setBlueScore] = useState(8);
