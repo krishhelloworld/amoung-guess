@@ -15,6 +15,7 @@
     "express": "^5.2.1",
     "nodemon": "^3.1.14",
     "socket.io": "^4.8.3",
-    "socket.io-client": "^4.8.3"
+    "socket.io-client": "^4.8.3",
+    "url": "^0.11.4"
   }
 }

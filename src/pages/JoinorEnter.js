@@ -21,7 +21,7 @@ if(!Join)
       console.log(URL)
       navigator.clipboard.writeText(URL)
       setCopied(true)    
-      setTimeout(()=>navigate(`/game/${roomId}`),2000);
+      setTimeout(()=>navigate(`/game/${roomId}`),500);
       console.log(name)
     }
     )
@@ -80,7 +80,7 @@ const roomId = response.roomCode;
           </button>
         </div>
       </div>
-      {copied && <div style = {{color: "#ffe5dc", fontSize: "30px", backgroundColor: "#3d0605", padding: "15px 30px", textAlign: "center",fontStyle:"italic",fontFamily:"Times New Roman", fontWeight: "bold", position: "fixed", top: 0, left: 0, width: "100%", zIndex: 1000, boxShadow: "0 4px 8px rgba(0,0,0,0.2)",}}> 
+      {copied && <div style = {{color: "#f7edea", fontSize: "30px", backgroundColor: "#3d0605", padding: "15px 30px", textAlign: "center",fontStyle:"italic",fontFamily:"Times New Roman", fontWeight: "bold", position: "fixed", top: 0, left: 0, width: "100%", zIndex: 1000, boxShadow: "0 4px 8px rgba(0,0,0,0.2)",}}> 
         Copied the Link </div>}
     </div>
   );
