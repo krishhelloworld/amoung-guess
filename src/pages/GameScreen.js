@@ -11,6 +11,7 @@ import PlayerProfiles from "../components/PlayerProfiles";
 import nlp from "compromise";
 import { generate } from "random-words";
 import { socket } from "../services/socket.js";
+import { loadPlayerSession, clearPlayerSession } from "../utils/playerSession.js";
 
 //====================Export Game logic here=================
 
@@ -110,13 +111,27 @@ export default function GameScreen() {
 
   //---------------------SOCKET.IO USEEFFECT CONNECTION --------------------
   useEffect(() => {
+    const savedSession = loadPlayerSession();
+    if (savedSession?.roomCode && savedSession?.playerName) {
+      console.log("Restoring saved session for", savedSession.playerName, "in", savedSession.roomCode);
+      socket.emit("join-room", savedSession.roomCode, savedSession.playerName, (response) => {
+        const restoredRoomCode = response?.roomCode;
+        if (restoredRoomCode) {
+          const currentPath = window.location.pathname;
+          if (!currentPath.includes(restoredRoomCode)) {
+            window.history.replaceState({}, "", `/game/${restoredRoomCode}`);
+          }
+        }
+      });
+    }
+
     socket.on("connect", () => {
       console.log("user Connected succesfully ", socket.id);
     });
     return () => {
       socket.off("connect");
     };
-  });
+  }, []);
   //=====this is set to check the time because it time changes like her mood
   useEffect(() => {
     const active = phase === "Clue Phase" || phase === "Guess Phase";
@@ -148,6 +163,7 @@ export default function GameScreen() {
   useEffect(()=>{
     setWords(AssignTeamToWords)
   },[])
+
 
   // ----------------------------------------------------------------------------------------------------------------------
   // ----- WordMaster sends clue -----

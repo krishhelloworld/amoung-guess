@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { socket } from "../services/socket.js";
+import { savePlayerSession } from "../utils/playerSession.js";
 
 export default function EnterName({ onClose, roomCode, setRoomCode, Join }) {
   const [name, setName] = useState("");
@@ -17,6 +18,7 @@ if(!Join)
       const roomId = response.roomCode;
       const room = response.MyRoom;
       console.log(room)
+      savePlayerSession({ roomCode: roomId, playerName: name });
       const URL = window.location.origin + 'game${roomId}';
       console.log(URL)
       navigator.clipboard.writeText(URL)
@@ -31,12 +33,35 @@ else{
 const roomId = response.roomCode;
       const room = response.name;
       console.log(room,roomCode)
+      savePlayerSession({ roomCode: roomId, playerName: name });
       navigate(`/game/${roomId}`);
     })
 }
 
     console.log(name);
   };
+useEffect(()=>{
+  const GotoInput=(e)=>{
+   if(/^[a-z A-Z]$/.test(e.key)) {
+    console.log(e)
+    setName((prev)=>prev+e.key)
+   }
+   if(e.key==="Backspace"){
+    setName((prev)=> prev.slice(0,prev.length-1))
+   }
+  }
+  const Submit= (e)=>{
+   if(e.key === "Enter"){
+    handleJoin(name);
+   }
+  }
+  window.addEventListener("keydown",GotoInput)
+  window.addEventListener("keydown",Submit)
+  return()=>(
+  window.removeEventListener("keydown",Submit),
+    window.removeEventListener("keydown",GotoInput)
+  )
+})
 
   return (
     <div className="fixed inset-0 flex items-center gap-10 justify-center bg-black/70 z-50">

@@ -149,16 +149,75 @@ word options in settings where the admin can select the options like-;
 
 
 ## Data Layout
+src/
+│
+├── assets/
+│
+├── components/
+│   ├── Chat/
+│   ├── WordBoard/
+│   ├── Profiles/
+│   ├── Timer/
+│   └── ...
+│
+├── context/
+│   ├── GameContext.jsx
+│   ├── RoomContext.jsx
+│   └── ProfileContext.jsx
+│
+├── gamelogic/
+│   ├── voteLogic.js
+│   ├── animations.js
+│   └── uiHelpers.js
+│
+├── hooks/
+│   ├── useSocket.js
+│   ├── useLocalStorage.js
+│   └── useReconnect.js
+│
+├── pages/
+│   ├── StartMatch.jsx
+│   ├── Lobby.jsx
+│   └── GameScreen.jsx
+│
+├── services/
+│   ├── socket.js          ⭐ React socket
+│   ├── roomAPI.js
+│   └── localStorage.js    ⭐ Wrapper around browser storage
+│
+├── utils/
+│   ├── shuffle.js
+│   └── random.js
+│
+├── App.jsx
+└── index.jsx
 
-### Light Data
-```cpp
-struct Light {
-    float3 position;
-    float  radius;
-    float3 color;
-    float  intensity;
-};
-```
 
 
----
+server/
+│
+├── sockets/
+│   ├── index.js           ⭐ Socket.IO entry
+│   ├── roomHandlers.js
+│   ├── gameHandlers.js
+│   ├── chatHandlers.js
+│   └── reconnectHandlers.js
+│
+├── rooms/
+│   ├── RoomManager.js
+│   └── roomStore.js
+│
+├── game/
+│   ├── BoardGenerator.js
+│   ├── RoleAssignment.js
+│   ├── VoteEngine.js
+│   ├── TurnManager.js
+│   └── WinChecker.js
+│
+├── middleware/
+│
+├── utils/
+│   └── generateRoomCode.js
+│
+├── server.js
+└── package.json

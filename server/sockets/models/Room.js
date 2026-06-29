@@ -10,6 +10,7 @@ export default function Room(roomCode, socketId, isAdmin, playerName) {
         },
       ]
     };
+    console.log(rooms)
     return rooms[roomCode];
   } else {
     if (!rooms[roomCode]) {
