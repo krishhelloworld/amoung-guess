@@ -3,11 +3,20 @@ import { useNavigate } from "react-router-dom";
 import fightBg from "../assets/IMAGES/FIGHT.png";
 import {socket} from '../services/socket.js';
 import EnterName from './JoinorEnter.js'
+import { loadPlayerSession } from "../utils/playerSession.js";
 function StartMatch() {
   const navigate = useNavigate();
   const [showEnterName, setShowEnterName] = useState(false);
 const [roomCodes, setRoomCodes] = useState("")
 const [join,setJoin] = useState(false)
+
+  useEffect(() => {
+    const savedSession = loadPlayerSession();
+    if (savedSession?.roomCode) {
+      navigate(`/game/${savedSession.roomCode}`);
+    }
+  }, [navigate]);
+
   return (
     <>
       <div

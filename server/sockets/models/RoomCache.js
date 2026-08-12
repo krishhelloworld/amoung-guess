@@ -1,5 +1,6 @@
 import Redis from "ioredis";
 
+//connect to database to transfer the cache to database 
 export class CacheService {
   constructor() {
     this.redis = new Redis();
